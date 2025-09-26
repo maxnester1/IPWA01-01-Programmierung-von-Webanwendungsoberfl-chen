@@ -21,8 +21,8 @@ Das Projekt habe ich im Rahmen der Fallstudie für das Modul IPWA01-01 entwickel
 - JavaScript (Vanilla, ohne Frameworks)
 
 ## Autor
-Name: Max Nester
-Studiengang: Medieninformatik
-Kursbezeichnung: IPWA01-01 – Programmierung von Webanwendungsoberflächen
-Matrikelnummer: 92113638
+- Name: Max Nester
+- Studiengang: Medieninformatik
+- Kursbezeichnung: IPWA01-01 – Programmierung von Webanwendungsoberflächen
+- Matrikelnummer: 92113638
 
