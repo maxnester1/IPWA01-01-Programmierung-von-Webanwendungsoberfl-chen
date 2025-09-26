@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Kleiderspenden-Portal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <meta name="description" content="Portal zur Registrierung von Kleiderspenden" />
+</head>
+<body class="min-h-screen bg-gray-50 text-gray-800 font-sans">
+
+  <!-- Header -->
+  <header class="bg-gradient-to-r from-blue-200 to-green-200 shadow-md">
+    <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
+      <!-- Logo and title -->
+      <div class="flex items-center">
+        <img src="images/Kleiderspenden-Portal-Logo.png" alt="Kleiderspenden Logo" class="h-16 w-auto">
+        <div class="ml-3">
+          <h1 class="text-lg font-semibold leading-tight text-gray-800">Kleiderspenden-Portal</h1>
+          <p class="text-sm text-gray-700">Gemeinnütziger Verein - Spende registrieren</p>
+        </div>
+      </div>
+
+      <!-- Global navigation -->
+      <nav class="hidden md:flex items-center gap-6">
+        <a href="#register" class="text-sm hover:underline text-gray-700">Spende registrieren</a>
+        <a href="#info" class="text-sm hover:underline text-gray-700">Info</a>
+        <a href="#kontakt" class="text-sm hover:underline text-gray-700">Kontakt</a>
+      </nav>
+
+      <!-- Mobile menu button -->
+      <button id="menu-btn" class="md:hidden p-2 rounded-md hover:bg-gray-100 text-gray-700">
+        ☰
+      </button>
+    </div>
+
+    <!-- Mobile navigation -->
+    <div class="md:hidden hidden flex-col space-y-2 px-4 pb-4 bg-blue-50" id="mobile-menu">
+      <a href="#register" class="block text-gray-700 hover:text-blue-800 font-medium transition">Spende registrieren</a>
+      <a href="#info" class="block text-gray-700 hover:text-blue-800 font-medium transition">Info</a>
+      <a href="#kontakt" class="block text-gray-700 hover:text-blue-800 font-medium transition">Kontakt</a>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <!-- Left column: info -->
+      <section class="md:col-span-1 bg-white p-6 rounded-lg shadow">
+        <h2 class="text-xl font-semibold mb-2">So funktioniert's</h2>
+        <p class="text-sm text-gray-600 mb-4">
+          Wähle, ob Du die Kleiderspende <strong>an der Geschäftsstelle</strong> abgeben
+          oder durch ein <strong>Sammelfahrzeug</strong> abholen lassen möchtest. Bei Abholung
+          prüfen wir, ob Deine PLZ in der Nähe liegt.
+        </p>
+
+        <dl class="text-sm text-gray-700 space-y-3">
+          <div>
+            <dt class="font-medium">Übergabe</dt>
+            <dd class="text-gray-600">Nur Kleidungsart + Krisengebiet auswählen (z. B. am Tablet vor Ort).</dd>
+          </div>
+          <div>
+            <dt class="font-medium">Abholung</dt>
+            <dd class="text-gray-600">Abholadresse, Kleidungsart + Krisengebiet erforderlich. PLZ-Prüfung wird durchgeführt.</dd>
+          </div>
+        </dl>
+      </section>
+
+      <!-- Right column: form (spans 2 cols) -->
+      <section id="register" class="md:col-span-2 bg-white p-6 rounded-lg shadow">
+        <h2 class="text-2xl font-semibold mb-4">Spende registrieren</h2>
+
+        <form id="donationForm" class="space-y-4" novalidate>
+          <!-- Delivery type -->
+          <div>
+            <label for="deliveryType" class="block text-sm font-medium text-gray-700">Art der Übergabe</label>
+            <select id="deliveryType" required
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 p-2"
+                    aria-describedby="deliveryHelp">
+              <option value="">Bitte wählen...</option>
+              <option value="office">Übergabe an der Geschäftsstelle</option>
+              <option value="pickup">Abholung durch Sammelfahrzeug</option>
+            </select>
+            <p id="deliveryHelp" class="mt-1 text-xs text-gray-500">Wähle "Übergabe" für Registrierung am Tablet vor Ort.</p>
+          </div>
+
+          <!-- Pick-up address fields (hidden unless pickup chosen) -->
+          <div id="pickupBlock" class="hidden space-y-3">
+            <div>
+              <label for="street" class="block text-sm font-medium text-gray-700">Straße & Hausnummer</label>
+              <input id="street" type="text" placeholder="Musterstraße 1"
+                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2"
+                     />
+            </div>
+            <div>
+              <label for="zipcode" class="block text-sm font-medium text-gray-700">Postleitzahl</label>
+              <input id="zipcode" type="text" inputmode="numeric" maxlength="10" placeholder="z. B. 12345"
+                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2"
+                     />
+              <p id="zipHelp" class="mt-1 text-xs text-gray-500">Wir prüfen, ob die ersten zwei Ziffern mit der Geschäftsstelle übereinstimmen.</p>
+            </div>
+          </div>
+
+          <!-- Clothing type (common) -->
+          <div>
+            <label for="clothingType" class="block text-sm font-medium text-gray-700">Art der Kleidung</label>
+            <input id="clothingType" type="text" placeholder="z. B. Jacken, Kinderkleidung"
+                   required
+                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2" />
+          </div>
+
+          <!-- Crisis region -->
+          <div>
+            <label for="crisisRegion" class="block text-sm font-medium text-gray-700">Krisengebiet</label>
+            <select id="crisisRegion" required
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2">
+              <option value="">Bitte wählen...</option>
+              <option value="Ukraine">Ukraine</option>
+              <option value="Syrien">Syrien</option>
+              <option value="Sudan">Sudan</option>
+              <option value="Andere">Andere</option>
+            </select>
+          </div>
+
+          <!-- Error message -->
+          <p id="errorMsg" class="text-sm text-red-600 hidden"></p>
+
+          <!-- Actions -->
+          <div class="flex items-center gap-3">
+            <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+              Registrieren
+            </button>
+            <button type="button" id="resetBtn" class="bg-white border border-gray-300 px-3 py-2 rounded hover:bg-gray-50">
+              Zurücksetzen
+            </button>
+          </div>
+        </form>
+
+        <!-- Confirmation area (hidden initially) -->
+        <div id="confirmation" class="hidden mt-6 bg-green-50 border-l-4 border-green-600 p-4 rounded">
+          <h3 class="text-lg font-semibold text-green-800 mb-2">Registrierung erfolgreich</h3>
+          <p class="text-sm text-green-800 mb-4">Deine Angaben wurden entgegengenommen. Unten findest Du die Zusammenfassung:</p>
+
+          <div class="bg-white p-4 rounded shadow-sm">
+            <dl class="grid grid-cols-1 gap-y-2 text-sm text-gray-800">
+              <div><dt class="font-medium">Art der Übergabe:</dt><dd id="confDelivery" class="mt-0.5"></dd></div>
+              <div id="confAddressRow" class="hidden"><dt class="font-medium">Abholadresse:</dt><dd id="confAddress" class="mt-0.5"></dd></div>
+              <div><dt class="font-medium">Art der Kleidung:</dt><dd id="confClothing" class="mt-0.5"></dd></div>
+              <div><dt class="font-medium">Krisengebiet:</dt><dd id="confRegion" class="mt-0.5"></dd></div>
+              <div><dt class="font-medium">Datum & Uhrzeit:</dt><dd id="confDatetime" class="mt-0.5"></dd></div>
+              <div><dt class="font-medium">Ort:</dt><dd id="confLocation" class="mt-0.5"></dd></div>
+            </dl>
+          </div>
+
+          <div class="mt-4 flex gap-3">
+            <button id="newRegBtn" class="bg-white border border-gray-300 px-3 py-2 rounded hover:bg-gray-50">Neue Registrierung</button>
+            <a href="#register" id="downloadDummy" class="ml-auto text-sm text-gray-600 underline">Link zum Repository (Platzhalter)</a>
+          </div>
+        </div>
+      </section>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t mt-12">
+    <div class="max-w-5xl mx-auto px-4 py-6 text-xs text-gray-600">
+      <p>&copy; <span id="currentYear"></span> Gemeinnütziger Verein • Alle Rechte vorbehalten • <a href="#" class="underline">Impressum</a> • <a href="#" class="underline">Datenschutz</a></p>
+    </div>
+  </footer>
+
+  <!-- JavaScript -->
+  <script>
+    // Mobile menu toggle (safe: only if element exists)
+    (function() {
+      const menuBtn = document.getElementById('menu-btn');
+      const mobileMenu = document.getElementById('mobile-menu');
+      if (menuBtn && mobileMenu) {
+        menuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+      }
+    })();
+
+    // Configuration: Office ZIP code (full)
+    // For proximity check, compare the first 2 digits.
+    const officeZip = "12345"; // adjust if necessary
+    const officeFirstTwo = officeZip.slice(0,2);
+
+    // Element references
+    const deliveryType = document.getElementById('deliveryType');
+    const pickupBlock = document.getElementById('pickupBlock');
+    const zipcodeEl = document.getElementById('zipcode');
+    const donationForm = document.getElementById('donationForm');
+    const pickupStreet = document.getElementById('street');
+    const clothingType = document.getElementById('clothingType');
+    const crisisRegion = document.getElementById('crisisRegion');
+    const errorMsg = document.getElementById('errorMsg');
+    const confirmation = document.getElementById('confirmation');
+    const confDelivery = document.getElementById('confDelivery');
+    const confAddressRow = document.getElementById('confAddressRow');
+    const confAddress = document.getElementById('confAddress');
+    const confClothing = document.getElementById('confClothing');
+    const confRegion = document.getElementById('confRegion');
+    const confDatetime = document.getElementById('confDatetime');
+    const confLocation = document.getElementById('confLocation');
+    const newRegBtn = document.getElementById('newRegBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const currentYearEl = document.getElementById('currentYear');
+
+    // Set current year in footer
+    currentYearEl.textContent = new Date().getFullYear();
+
+    // Toggle pickup fields when delivery type changes
+    deliveryType.addEventListener('change', () => {
+      const value = deliveryType.value;
+      if (value === 'pickup') {
+        pickupBlock.classList.remove('hidden');
+      } else {
+        pickupBlock.classList.add('hidden');
+        // clear pickup fields
+        zipcodeEl.value = '';
+        pickupStreet.value = '';
+      }
+      hideError();
+    });
+
+    // Helper: show/hide error
+    function showError(msg) {
+      errorMsg.textContent = msg;
+      errorMsg.classList.remove('hidden');
+    }
+    function hideError() {
+      errorMsg.textContent = '';
+      errorMsg.classList.add('hidden');
+    }
+
+    // Safe text setter (prevents HTML injection, uses textContent)
+    function setSafeText(el, text) {
+      el.textContent = text ?? '';
+    }
+
+    // Validate postal code 'near' check (first two digits)
+    function isNearPLZ(plz) {
+      if (!plz || typeof plz !== 'string') return false;
+      const digits = plz.replace(/\s+/g, '');
+      if (digits.length < 2) return false;
+      return digits.slice(0,2) === officeFirstTwo;
+    }
+
+    // Form submit handling
+    donationForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      hideError();
+
+      const delivery = deliveryType.value;
+      const clothing = clothingType.value?.trim();
+      const region = crisisRegion.value;
+      const street = pickupStreet.value?.trim();
+      const zipcode = zipcodeEl.value?.trim();
+
+      // Basic validation
+      if (!delivery) {
+        showError('Bitte eine Art der Übergabe auswählen.');
+        return;
+      }
+      if (!clothing) {
+        showError('Bitte die Art der Kleidung angeben.');
+        return;
+      }
+      if (!region) {
+        showError('Bitte ein Krisengebiet auswählen.');
+        return;
+      }
+
+      // If pickup, require address and check PLZ near
+      if (delivery === 'pickup') {
+        if (!street) {
+          showError('Bitte die Straße und Hausnummer angeben.');
+          return;
+        }
+        if (!zipcode) {
+          showError('Bitte die Postleitzahl angeben.');
+          return;
+        }
+        if (!isNearPLZ(zipcode)) {
+          showError('Die Abholadresse liegt nicht in der Nähe der Geschäftsstelle (erste zwei PLZ-Ziffern stimmen nicht überein).');
+          return;
+        }
+      }
+
+      // Validation successful -> show confirmation
+      showConfirmation({ delivery, clothing, region, street, zipcode });
+    });
+
+    // Show confirmation summary (safe)
+    function showConfirmation({ delivery, clothing, region, street, zipcode }) {
+      // hide form
+      donationForm.classList.add('hidden');
+
+      // Delivery label
+      const deliveryLabel = delivery === 'office' ? 'Übergabe an der Geschäftsstelle' : 'Abholung durch Sammelfahrzeug';
+      setSafeText(confDelivery, deliveryLabel);
+
+      // Address
+      if (delivery === 'pickup') {
+        confAddressRow.classList.remove('hidden');
+        setSafeText(confAddress, (street + ', ' + zipcode));
+      } else {
+        confAddressRow.classList.add('hidden');
+        setSafeText(confAddress, '');
+      }
+
+      setSafeText(confClothing, clothing);
+      setSafeText(confRegion, region);
+
+      // datetime and location
+      const now = new Date();
+      setSafeText(confDatetime, now.toLocaleString('de-DE'));
+      const locationText = delivery === 'office' ? 'Geschäftsstelle' : 'Abholadresse';
+      setSafeText(confLocation, locationText);
+
+      // show confirmation container
+      confirmation.classList.remove('hidden');
+
+      // Scroll to confirmation
+      confirmation.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // New registration -> reset form and UI
+    newRegBtn.addEventListener('click', () => {
+      resetAll();
+    });
+
+    resetBtn.addEventListener('click', () => {
+      resetAll();
+    });
+
+    function resetAll() {
+      // reset fields
+      donationForm.reset();
+      pickupBlock.classList.add('hidden');
+      hideError();
+
+      // show form, hide confirmation
+      donationForm.classList.remove('hidden');
+      confirmation.classList.add('hidden');
+
+      // clear confirmation texts
+      setSafeText(confDelivery, '');
+      setSafeText(confAddress, '');
+      setSafeText(confClothing, '');
+      setSafeText(confRegion, '');
+      setSafeText(confDatetime, '');
+      setSafeText(confLocation, '');
+
+      // focus top of form
+      deliveryType.focus();
+    }
+
+    // Accessibility: allow Enter to submit on selects/inputs naturally handled by form
+  </script>
+</body>
+</html>
